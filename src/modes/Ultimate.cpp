@@ -145,7 +145,7 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         // Up-angled C-stick with MX.
         if (directions.cx != 0) {
             outputs.rightStickX = 128 + (directions.cx * 56);
-            outputs.rightStickY = 128 + 56;
+            outputs.rightStickY = 128 - 56;
         }
     }
 
@@ -239,7 +239,7 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         // Down-angled C-stick with MY.
         if (directions.cx != 0) {
             outputs.rightStickX = 128 + (directions.cx * 56);
-            outputs.rightStickY = 128 - 56;
+            outputs.rightStickY = 128 + 56;
         }
 
     }
