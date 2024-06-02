@@ -88,12 +88,6 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
             }
         }
 
-        // Angled fsmash/ftilt with C-Stick + MX
-        if (directions.cx != 0) {
-            outputs.rightStickX = 128 + (directions.cx * 127);
-            outputs.rightStickY = 128 + (directions.y * 59);
-        }
-
         /* Up B angles */
         if (directions.diagonal && !shield_button_pressed) {
             // (33.44) = 53 35
@@ -146,12 +140,12 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
                     outputs.leftStickY = 128 + (directions.y * 35);
                 }
             }
+        }
 
-            // Angled Ftilts
-            if (inputs.a) {
-                outputs.leftStickX = 128 + (directions.x * 36);
-                outputs.leftStickY = 128 + (directions.y * 26);
-            }
+        // Up-angled C-stick with MX.
+        if (directions.cx != 0) {
+            outputs.rightStickX = 128 + (directions.cx * 56);
+            outputs.rightStickY = 128 + 56;
         }
     }
 
@@ -240,21 +234,14 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
                     outputs.leftStickY = 128 + (directions.y * 67);
                 }
             }
-
-            // MY Pivot Uptilt/Dtilt
-            if (inputs.a) {
-                outputs.leftStickX = 128 + (directions.x * 34);
-                outputs.leftStickY = 128 + (directions.y * 38);
-            }
         }
-    }
 
-    // C-stick ASDI Slideoff angle overrides any other C-stick modifiers (such as
-    // angled fsmash).
-    if (directions.cx != 0 && directions.cy != 0) {
-        // 5250 8500 = 42 68
-        outputs.rightStickX = 128 + (directions.cx * 42);
-        outputs.rightStickY = 128 + (directions.cy * 68);
+        // Down-angled C-stick with MY.
+        if (directions.cx != 0) {
+            outputs.rightStickX = 128 + (directions.cx * 56);
+            outputs.rightStickY = 128 - 56;
+        }
+
     }
 
     if (inputs.l) {
