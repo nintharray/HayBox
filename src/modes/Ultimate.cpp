@@ -20,8 +20,8 @@ void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.b = inputs.b;
     outputs.x = inputs.x;
     outputs.y = inputs.y;
-    outputs.buttonL = inputs.lightshield;
-    outputs.buttonR = inputs.z || inputs.midshield;
+    // outputs.buttonL = inputs.lightshield;
+    // outputs.buttonR = inputs.z || inputs.midshield;
     outputs.triggerLDigital = inputs.l;
     outputs.triggerRDigital = inputs.r;
     outputs.start = inputs.start;
@@ -34,6 +34,13 @@ void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
         outputs.dpadDown = inputs.c_down;
         outputs.dpadLeft = inputs.c_left;
         outputs.dpadRight = inputs.c_right;
+
+				// If MX + MY are held and ZL + ZR are pressed, send L + R signal.
+				// This is just intended for resetting Training Mode in Ultimate.
+				if (inputs.l && inputs.r) {
+					outputs.buttonL = inputs.l;
+					outputs.buttonR = inputs.r;
+				}
     }
 }
 
