@@ -33,6 +33,18 @@ void Ultimate::UpdateDigitalOutputs(const InputState &inputs, OutputState &outpu
 					outputs.buttonL = inputs.lf4;
 					outputs.buttonR = inputs.lf5;
 				}
+
+				// MX + MY + Start = Select
+				if (inputs.mb1) {
+					outputs.start = 0;
+					outputs.select = 1;
+				}
+
+				// MX + MY + Home = Capture
+				if (inputs.mb2) {
+					outputs.home = 0;
+					outputs.capture = 1;
+				}
     }
 }
 
