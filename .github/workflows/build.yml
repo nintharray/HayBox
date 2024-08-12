@@ -9,6 +9,8 @@ jobs:
       contents: write
     env:
       VERSION_REF: ${{ github.ref_type == 'tag' && github.ref_name || github.sha }}
+      PIO_ENV: ${{ matrix.env }}
+      BIN_EXT: ${{ matrix.bin_ext }}
     strategy:
         matrix:
           include:
@@ -17,10 +19,10 @@ jobs:
 
     steps:
     - name: Check out source code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
@@ -29,20 +31,28 @@ jobs:
         python -m pip install --upgrade pip
         pip install --upgrade platformio
 
+    - name: Set artifact filename environment variable
+      run: |
+        echo "ARTIFACT_NAME=HayBox-${VERSION_REF}-${PIO_ENV}.${BIN_EXT}" >> "$GITHUB_ENV"
+
+    - name: Set artifact path environment variable
+      run: |
+        echo "ARTIFACT_PATH=${PIO_ENV}/${ARTIFACT_NAME}" >> "$GITHUB_ENV"
+
     - name: Build ${{ matrix.env }} env
       run: |
-        pio run -e ${{ matrix.env }}
-        mkdir -p ${{ matrix.env }}
-        cp .pio/build/${{ matrix.env }}/firmware.${{ matrix.bin_ext }} ${{ matrix.env }}/HayBox-${{ env.VERSION_REF }}-${{ matrix.env }}.${{ matrix.bin_ext }}
+        pio run -e "$PIO_ENV"
+        mkdir -p "$PIO_ENV"
+        cp ".pio/build/${PIO_ENV}/firmware.${BIN_EXT}" "$ARTIFACT_PATH"
 
     - name: Publish ${{ matrix.env }} artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: HayBox-${{ env.VERSION_REF }}-${{ matrix.env }}.${{ matrix.bin_ext }}
-        path: ${{ matrix.env }}/HayBox-${{ env.VERSION_REF }}-${{ matrix.env }}.${{ matrix.bin_ext }}
+        name: ${{ env.ARTIFACT_NAME }}
+        path: ${{ env.ARTIFACT_PATH }}
 
     - name: Upload binaries to release
       uses: softprops/action-gh-release@v1
       if: github.ref_type == 'tag'
       with:
-        files: ${{ matrix.env }}/HayBox-${{ env.VERSION_REF }}-${{ matrix.env }}.${{ matrix.bin_ext }}
+        files: ${{ env.ARTIFACT_PATH }}
