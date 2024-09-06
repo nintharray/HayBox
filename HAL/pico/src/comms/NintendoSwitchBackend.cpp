@@ -141,9 +141,9 @@ void NintendoSwitchBackend::SendReport() {
 
     // Analog outputs
     _report.lx = (_outputs.leftStickX - 128) * 1.25 + 128;
-    _report.ly = 255 - ((_outputs.leftStickY - 128) * 1.25 + 128);
+    _report.ly = 256 - ((_outputs.leftStickY - 128) * 1.25 + 128);
     _report.rx = (_outputs.rightStickX - 128) * 1.25 + 128;
-    _report.ry = 255 - ((_outputs.rightStickY - 128) * 1.25 + 128);
+    _report.ry = 256 - ((_outputs.rightStickY - 128) * 1.25 + 128);
 
     // D-pad Hat Switch
     _report.hat =
